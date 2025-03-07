@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    app: request-timeouts
+  name: request-timeouts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: request-timeouts
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: request-timeouts
+    spec:
+      containers:
+        - args: []
+          command:
+            - "./main"
+          env:
+            - name: RUST_LOG
+              value: "trace,pprof=warn,Pyroscope=warn"
+            - name: ENDPOINT
+              value: "ENDPOINT_PLACEHOLDER"
+          image: "IMAGE_PLACEHOLDER"
+          imagePullPolicy: IfNotPresent
+          name: default
+          resources:
+            limits:
+              cpu: "4"
+              memory: 8Gi
+            requests:
+              cpu: "2"
+              memory: 8Gi
+          stdin: false
+          tty: false
+      terminationGracePeriodSeconds: 1
